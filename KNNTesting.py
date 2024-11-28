@@ -9,25 +9,34 @@ from sklearn.preprocessing import minmax_scale
 
 dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Disease_Prediction.csv", "D7diabetes.csv", "D8Breast_cancer_data.csv"]
 
-for dataFile in dataFiles:
-    print(dataFile)
-    dataset=pd.read_csv("DataSets/" + dataFile, sep=',')
-    dataset = dataset.dropna(axis=0, how='any', subset=None, inplace=False)
+with open("KNNOutput.csv", 'w') as output_file:
+    for dataFile in dataFiles:
+        print(dataFile)
+        dataset=pd.read_csv("DataSets/" + dataFile, sep=',')
+        dataset = dataset.dropna(axis=0, how='any', subset=None, inplace=False)
 
-    X = dataset.iloc[:, :-1].values
-    y = dataset.iloc[:, -1].values
+        X = dataset.iloc[:, :-1].values
+        y = dataset.iloc[:, -1].values
 
-    X = minmax_scale(X, axis=0)
-
-    for i in range(1, 10, 2): # 1, 3, 5, 7, 9
-        print("K = ", i)
-        model=KNeighborsClassifier(n_neighbors=i)
-        crossVSAcc=cross_val_score(model, X, y, cv=10, scoring='accuracy')
-        crossVSPrecision=cross_val_score(model, X, y, cv=10, scoring='precision')
-        crossVSRecall=cross_val_score(model, X, y, cv=10, scoring='recall')
-        accuracy = crossVSAcc.mean()
-        precision = crossVSPrecision.mean()
-        recall = crossVSRecall.mean()
-        print("accuracy: ", accuracy)
-        print("precision: ", precision)
-        print("recall: ", recall)
+        X = minmax_scale(X, axis=0)
+        highAccuracy = 0
+        highPrecision = 0
+        highRecall = 0
+        highK = 0
+        for i in range(1, 10, 2): # 1, 3, 5, 7, 9
+            print("K = ", i)
+            model=KNeighborsClassifier(n_neighbors=i)
+            crossVSAcc=cross_val_score(model, X, y, cv=10, scoring='accuracy')
+            crossVSPrecision=cross_val_score(model, X, y, cv=10, scoring='precision')
+            crossVSRecall=cross_val_score(model, X, y, cv=10, scoring='recall')
+            accuracy = crossVSAcc.mean()
+            precision = crossVSPrecision.mean()
+            recall = crossVSRecall.mean()
+            if accuracy > highAccuracy:
+                highAccuracy = accuracy
+                highPrecision = precision
+                highRecall = recall
+                highK = i
+            print("accuracy: ", accuracy)
+            print("precision: ", precision)
+            print("recall: ", recall)
