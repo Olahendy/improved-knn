@@ -10,6 +10,7 @@ from sklearn.preprocessing import minmax_scale
 dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Disease_Prediction.csv", "D7diabetes.csv", "D8Breast_cancer_data.csv"]
 
 for dataFile in dataFiles:
+    print(dataFile)
     dataset=pd.read_csv("DataSets/" + dataFile, sep=',')
     dataset = dataset.dropna(axis=0, how='any', subset=None, inplace=False)
 
