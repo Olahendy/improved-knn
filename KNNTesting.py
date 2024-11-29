@@ -16,6 +16,7 @@ minkowskiHighExponent = 3 # 2^3 = 8
 
 dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Disease_Prediction.csv", "D5kidney_disease.csv", "D6kidney_disease.csv", "D7diabetes.csv", "D8Breast_cancer_data.csv"]
 distanceMetrics = ['euclidean'] #['minkowski', 'chebyshev']
+NCA = True
 
 #This function is taken from someone else's hassanat distance formula here: https://www.kaggle.com/code/banddaniel/hassanat-distance-implementation-w-knn
 def hassanat_distance(df1, df2):
@@ -56,6 +57,10 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
         highRecall = 0
         highK = 0
         for k in range(1, 10, 2):  # 1, 3, 5, 7, 9
+            if NCA:
+                nca = NeighborhoodComponentsAnalysis()
+                nca.fit(X, y)
+                X = nca.transform(X)
             if verbose:
                 print("K = ", k)
             if distanceMetric == 'minkowski':
