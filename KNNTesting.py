@@ -56,11 +56,11 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
         highPrecision = 0
         highRecall = 0
         highK = 0
-        for k in range(1, 10, 2):  # 1, 3, 5, 7, 9
-            if NCA:
-                nca = NeighborhoodComponentsAnalysis()
-                nca.fit(X, y)
-                X = nca.transform(X)
+        if NCA:
+            nca = NeighborhoodComponentsAnalysis(max_iter=1000, tol=1e-6)
+            nca.fit(X, y)
+            X = nca.transform(X)
+        for k in range(1, 50, 2):  # 1, 3, 5, 7, 9, ...
             if verbose:
                 print("K = ", k)
             if distanceMetric == 'minkowski':
