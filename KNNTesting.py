@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
@@ -6,6 +7,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.preprocessing import minmax_scale
+from sklearn.neighbors import DistanceMetric
 import time
 
 verbose = False
@@ -13,6 +15,30 @@ minkowskiSubdivisions = 5
 minkowskiHighExponent = 3 # 2^3 = 8
 
 dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Disease_Prediction.csv", "D5kidney_disease.csv", "D6kidney_disease.csv", "D7diabetes.csv", "D8Breast_cancer_data.csv"]
+distanceMetrics = ['minkowski', 'chebyshev', 'hassanat']
+
+#This function is taken from someone else's hassanat distance formula here: https://www.kaggle.com/code/banddaniel/hassanat-distance-implementation-w-knn
+def hassanat_distance(df1, df2):
+    dist_list = []
+    total = 0
+    
+    for x in range(len(df1)):
+        data1 = np.array(df1)[x]
+        data2 = np.array(df2)[x]
+        
+        min_ = min(data1, data2)
+        max_ = max(data1, data2)
+        
+        if min_ >= 0:
+            dist = 1-( (1+min_)/(1+max_) )
+            dist_list.append(dist)
+
+        else:
+            dist = 1-( (1+min_ + np.abs(min_))/(1+max_+np.abs(min_) ) )
+            dist_list.append(dist)
+    
+    total = np.sum(dist_list)
+    return total
 
 def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
     accuracySum = 0
@@ -34,6 +60,8 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
                 print("K = ", k)
             if distanceMetric == 'minkowski':
                 model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, p=pValue)
+            elif distanceMetric == 'hassanat':
+                model = KNeighborsClassifier(n_neighbors=k, metric=hassanat_distance)
             else:
                 model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric)
             crossVSAcc = cross_val_score(model, X, y, cv=10, scoring='accuracy')
@@ -60,7 +88,6 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
 
 start_time = time.time()
 with open("KNNOutput.csv", 'w') as output_file:
-    distanceMetrics = ['minkowski', 'chebyshev']
     accuraciesDistanceMetricDict = dict()
     for distanceMetric in distanceMetrics:
         if(distanceMetric == 'minkowski'):
