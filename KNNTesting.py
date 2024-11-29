@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import NeighborhoodComponentsAnalysis
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
@@ -14,7 +15,7 @@ minkowskiSubdivisions = 5
 minkowskiHighExponent = 3 # 2^3 = 8
 
 dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Disease_Prediction.csv", "D5kidney_disease.csv", "D6kidney_disease.csv", "D7diabetes.csv", "D8Breast_cancer_data.csv"]
-distanceMetrics = ['hassanat'] #['minkowski', 'chebyshev']
+distanceMetrics = ['euclidean'] #['minkowski', 'chebyshev']
 
 #This function is taken from someone else's hassanat distance formula here: https://www.kaggle.com/code/banddaniel/hassanat-distance-implementation-w-knn
 def hassanat_distance(df1, df2):
@@ -58,11 +59,11 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
             if verbose:
                 print("K = ", k)
             if distanceMetric == 'minkowski':
-                model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, p=pValue)
+                model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, p=pValue, n_jobs=-1)
             elif distanceMetric == 'hassanat':
-                model = KNeighborsClassifier(n_neighbors=k, metric=hassanat_distance)
+                model = KNeighborsClassifier(n_neighbors=k, metric=hassanat_distance, n_jobs=-1)
             else:
-                model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric)
+                model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, n_jobs=-1)
             crossVSAcc = cross_val_score(model, X, y, cv=10, scoring='accuracy')
             crossVSPrecision = cross_val_score(model, X, y, cv=10, scoring='precision')
             crossVSRecall = cross_val_score(model, X, y, cv=10, scoring='recall')
@@ -114,6 +115,6 @@ with open("KNNOutput.csv", 'w') as output_file:
             highest_accuracy_key = key
     output_file.write("Best Distance Formula," + highest_accuracy_key + "\n")
     output_file.write("Highest Accuracy," + str(highest_accuracy) + "\n")
-output_file.write("Time taken: " + str(time.time() - start_time) + "\n")
+    output_file.write("Time taken: " + str(time.time() - start_time) + "\n")
 print("Time taken: ", time.time() - start_time)
-output_file.close()
+
