@@ -7,7 +7,6 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.preprocessing import minmax_scale
-from sklearn.neighbors import DistanceMetric
 import time
 
 verbose = False
@@ -15,7 +14,7 @@ minkowskiSubdivisions = 5
 minkowskiHighExponent = 3 # 2^3 = 8
 
 dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Disease_Prediction.csv", "D5kidney_disease.csv", "D6kidney_disease.csv", "D7diabetes.csv", "D8Breast_cancer_data.csv"]
-distanceMetrics = ['minkowski', 'chebyshev', 'hassanat']
+distanceMetrics = ['hassanat'] #['minkowski', 'chebyshev']
 
 #This function is taken from someone else's hassanat distance formula here: https://www.kaggle.com/code/banddaniel/hassanat-distance-implementation-w-knn
 def hassanat_distance(df1, df2):
