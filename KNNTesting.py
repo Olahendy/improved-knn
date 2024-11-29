@@ -114,4 +114,6 @@ with open("KNNOutput.csv", 'w') as output_file:
             highest_accuracy_key = key
     output_file.write("Best Distance Formula," + highest_accuracy_key + "\n")
     output_file.write("Highest Accuracy," + str(highest_accuracy) + "\n")
+output_file.write("Time taken: " + str(time.time() - start_time) + "\n")
 print("Time taken: ", time.time() - start_time)
+output_file.close()
