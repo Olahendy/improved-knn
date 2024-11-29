@@ -8,6 +8,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.preprocessing import minmax_scale
+from sklearn.pipeline import Pipeline
 import time
 
 verbose = False
@@ -56,19 +57,19 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
         highPrecision = 0
         highRecall = 0
         highK = 0
-        if NCA:
-            nca = NeighborhoodComponentsAnalysis(max_iter=1000, tol=1e-6)
-            nca.fit(X, y)
-            X = nca.transform(X)
         for k in range(1, 50, 2):  # 1, 3, 5, 7, 9, ...
             if verbose:
                 print("K = ", k)
-            if distanceMetric == 'minkowski':
-                model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, p=pValue, n_jobs=-1)
-            elif distanceMetric == 'hassanat':
-                model = KNeighborsClassifier(n_neighbors=k, metric=hassanat_distance, n_jobs=-1)
+            if NCA:
+                nca = NeighborhoodComponentsAnalysis(max_iter=1000, tol=1e-6)
+                model = Pipeline([('nca', nca), ('knn', KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, n_jobs=-1))])
             else:
-                model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, n_jobs=-1)
+                if distanceMetric == 'minkowski':
+                    model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, p=pValue, n_jobs=-1)
+                elif distanceMetric == 'hassanat':
+                    model = KNeighborsClassifier(n_neighbors=k, metric=hassanat_distance, n_jobs=-1)
+                else:
+                    model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, n_jobs=-1)
             crossVSAcc = cross_val_score(model, X, y, cv=10, scoring='accuracy')
             crossVSPrecision = cross_val_score(model, X, y, cv=10, scoring='precision')
             crossVSRecall = cross_val_score(model, X, y, cv=10, scoring='recall')
