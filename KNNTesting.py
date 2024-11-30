@@ -19,7 +19,7 @@ dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Di
 distanceMetrics = ['hassanat'] #['euclidean', 'hassanat', 'minkowski', 'chebyshev']
 NCA = False
 scale = False
-OptimizeMeasure = 'accuracy' # 'precision', 'recall', 'accuracy'
+OptimizeMeasure = 'accuracy' # 'precision', 'recall', 'accuracy', 'f1score'
 OutputFilePath = "/content/drive/MyDrive/MachineLearningProject/KNNOutputHassanatUnscaledAccuracy.csv"
 InputFilePath = "/content/drive/MyDrive/MachineLearningProject/DataSets/"
 
@@ -62,6 +62,7 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
         highAccuracy = 0
         highPrecision = 0
         highRecall = 0
+        highf1score = 0
         highK = 0
         for k in range(1, 50, 2):  # 1, 3, 5, 7, 9, ...
             if verbose:
@@ -79,25 +80,31 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
             crossVSAcc = cross_val_score(model, X, y, cv=10, scoring='accuracy')
             crossVSPrecision = cross_val_score(model, X, y, cv=10, scoring='precision')
             crossVSRecall = cross_val_score(model, X, y, cv=10, scoring='recall')
+            crossVSF1 = cross_val_score(model, X, y, cv=10, scoring='f1')
             accuracy = crossVSAcc.mean()
             precision = crossVSPrecision.mean()
             recall = crossVSRecall.mean()
-            if (OptimizeMeasure == 'accuracy' and accuracy > highAccuracy) or (OptimizeMeasure == 'precision' and precision > highPrecision) or (OptimizeMeasure == 'recall' and recall > highRecall):
+            f1score = crossVSF1.mean()
+            if (OptimizeMeasure == 'accuracy' and accuracy > highAccuracy) or (OptimizeMeasure == 'precision' and precision > highPrecision) or (OptimizeMeasure == 'recall' and recall > highRecall)or (OptimizeMeasure == 'f1score' and f1score > highf1score):
                 highAccuracy = accuracy
                 highPrecision = precision
                 highRecall = recall
+                highf1score = f1score
                 highK = k
             if verbose:
                 print("accuracy: ", accuracy)
                 print("precision: ", precision)
                 print("recall: ", recall)
-        output_file.write(dataFile + "," + str(highK) + "," + str(highAccuracy) + "," + str(highPrecision) + "," + str(highRecall) + "\n")
+                print("f1score: ", f1score)
+        output_file.write(dataFile + "," + str(highK) + "," + str(highAccuracy) + "," + str(highPrecision) + "," + str(highRecall) + "," + str(highf1score) + "\n")
         if OptimizeMeasure == 'accuracy':
             optimizedMeasureSum += highAccuracy
         elif OptimizeMeasure == 'precision':
             optimizedMeasureSum += highPrecision
         elif OptimizeMeasure == 'recall':
             optimizedMeasureSum += highRecall
+        elif OptimizeMeasure == 'f1score':
+            optimizedMeasureSum += highf1score
 
     averageOptimizedMetric = optimizedMeasureSum / len(dataFiles)
     output_file.write("Average " + OptimizeMeasure + "," + str(averageOptimizedMetric) + "\n")
