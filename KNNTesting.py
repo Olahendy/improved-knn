@@ -19,6 +19,7 @@ dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Di
 distanceMetrics = ['hassanat'] #['euclidean', 'hassanat', 'minkowski', 'chebyshev']
 NCA = False
 scale = False
+OptimizeMeasure = 'accuracy' # 'precision', 'recall', 'accuracy'
 OutputFilePath = "/content/drive/MyDrive/MachineLearningProject/KNNOutputHassanatUnscaledAccuracy.csv"
 InputFilePath = "/content/drive/MyDrive/MachineLearningProject/DataSets/"
 
@@ -46,7 +47,7 @@ def hassanat_distance(df1, df2):
     return total
 
 def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
-    accuracySum = 0
+    optimizedMeasureSum = 0
     for dataFile in dataFiles:
         print(dataFile)
         dataset = pd.read_csv(InputFilePath + dataFile, sep=',')
@@ -81,7 +82,7 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
             accuracy = crossVSAcc.mean()
             precision = crossVSPrecision.mean()
             recall = crossVSRecall.mean()
-            if accuracy > highAccuracy:
+            if (OptimizeMeasure == 'accuracy' and accuracy > highAccuracy) or (OptimizeMeasure == 'precision' and precision > highPrecision) or (OptimizeMeasure == 'recall' and recall > highRecall):
                 highAccuracy = accuracy
                 highPrecision = precision
                 highRecall = recall
@@ -91,10 +92,16 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
                 print("precision: ", precision)
                 print("recall: ", recall)
         output_file.write(dataFile + "," + str(highK) + "," + str(highAccuracy) + "," + str(highPrecision) + "," + str(highRecall) + "\n")
-        accuracySum += highAccuracy
-    averageAccuracy = accuracySum / len(dataFiles)
-    output_file.write("Average Accuracy," + str(averageAccuracy) + "\n")
-    return averageAccuracy
+        if OptimizeMeasure == 'accuracy':
+            optimizedMeasureSum += highAccuracy
+        elif OptimizeMeasure == 'precision':
+            optimizedMeasureSum += highPrecision
+        elif OptimizeMeasure == 'recall':
+            optimizedMeasureSum += highRecall
+
+    averageOptimizedMetric = optimizedMeasureSum / len(dataFiles)
+    output_file.write("Average " + OptimizeMeasure + "," + str(averageOptimizedMetric) + "\n")
+    return averageOptimizedMetric
 
 
 start_time = time.time()
