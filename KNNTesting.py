@@ -77,6 +77,7 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
                     model = KNeighborsClassifier(n_neighbors=k, metric=hassanat_distance, n_jobs=-1)
                 else:
                     model = KNeighborsClassifier(n_neighbors=k, metric=distanceMetric, n_jobs=-1)
+            #do multiple scorings
             crossVSAcc = cross_val_score(model, X, y, cv=10, scoring='accuracy')
             crossVSPrecision = cross_val_score(model, X, y, cv=10, scoring='precision')
             crossVSRecall = cross_val_score(model, X, y, cv=10, scoring='recall')
