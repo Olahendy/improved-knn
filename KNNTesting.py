@@ -1,12 +1,8 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neighbors import NeighborhoodComponentsAnalysis
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
 from sklearn.preprocessing import minmax_scale
 from sklearn.pipeline import Pipeline
 import time
@@ -16,11 +12,11 @@ minkowskiSubdivisions = 5
 minkowskiHighExponent = 3 # 2^3 = 8
 
 dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Disease_Prediction.csv", "D5kidney_disease.csv", "D6kidney_disease.csv", "D7diabetes.csv", "D8Breast_cancer_data.csv"]
-distanceMetrics = ['hassanat'] #['euclidean', 'hassanat', 'minkowski', 'chebyshev']
-NCA = False
-scale = False
+distanceMetrics = ['euclidean'] #['euclidean', 'hassanat', 'minkowski', 'chebyshev']
+NCA = True
+scale = True
 OptimizeMeasure = 'accuracy' # 'precision', 'recall', 'accuracy', 'f1score'
-OutputFilePath = "/content/drive/MyDrive/MachineLearningProject/KNNOutputHassanatUnscaledAccuracy.csv"
+OutputFilePath = "/content/drive/MyDrive/MachineLearningProject/KNNOutputNCAprecision.csv"
 InputFilePath = "/content/drive/MyDrive/MachineLearningProject/DataSets/"
 
 #This function is taken from someone else's hassanat distance formula here: https://www.kaggle.com/code/banddaniel/hassanat-distance-implementation-w-knn
@@ -134,13 +130,13 @@ with open(OutputFilePath, 'w') as output_file:
             accuraciesDistanceMetricDict[distanceMetric] = averageAccuracy
 
 
-    highest_accuracy = 0
+    highest_measure = 0
     for key, value in accuraciesDistanceMetricDict.items():
-        if value > highest_accuracy:
-            highest_accuracy = value
-            highest_accuracy_key = key
-    output_file.write("Best Distance Formula," + highest_accuracy_key + "\n")
-    output_file.write("Highest Accuracy," + str(highest_accuracy) + "\n")
+        if value > highest_measure:
+            highest_measure = value
+            highest_measure_key = key
+    output_file.write("Best Distance Formula," + highest_measure_key + "\n")
+    output_file.write("Highest Measure," + str(highest_measure) + "\n")
     output_file.write("Time taken: " + str(time.time() - start_time) + "\n")
 print("Time taken: ", time.time() - start_time)
 
