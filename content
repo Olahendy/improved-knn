@@ -1,0 +1,41 @@
+Optimizing for accuracy
+Distance Metric,hassanat
+D1heart.csv,15,0.8516129032258064
+D2heartoutcomes.csv,5,0.7858620689655172
+D3diabetes.csv,17,0.7473342447026659
+D4Heart_Disease_Prediction.csv,37,0.8481481481481481
+D5kidney_disease.csv,1,0.99375
+D6kidney_disease.csv,3,0.9499999999999998
+D7diabetes.csv,17,0.7473342447026659
+D8Breast_cancer_data.csv,3,0.9051378446115288
+Average accuracy,0.8536474317945416
+Best Distance Formula for accuracy,hassanat
+Highest accuracy,0.8536474317945416
+Optimizing for precision
+Distance Metric,hassanat
+D1heart.csv,5,0.8331007666224384
+D2heartoutcomes.csv,19,0.95
+D3diabetes.csv,45,0.7044050663743759
+D4Heart_Disease_Prediction.csv,45,0.8867377067377067
+D5kidney_disease.csv,1,1.0
+D6kidney_disease.csv,21,1.0
+D7diabetes.csv,45,0.7044050663743759
+D8Breast_cancer_data.csv,3,0.91364202702438
+Average precision,0.8740363291416596
+Best Distance Formula for precision,hassanat
+Highest precision,0.8740363291416596
+Optimizing for recall
+Distance Metric,hassanat
+D1heart.csv,45,0.9452205882352942
+D2heartoutcomes.csv,1,0.5066666666666667
+D3diabetes.csv,7,0.5301994301994302
+D4Heart_Disease_Prediction.csv,11,0.7833333333333333
+D5kidney_disease.csv,1,0.9800000000000001
+D6kidney_disease.csv,1,0.9480000000000001
+D7diabetes.csv,7,0.5301994301994302
+D8Breast_cancer_data.csv,5,0.9467460317460317
+Average recall,0.7712956850475233
+Best Distance Formula for recall,hassanat
+Highest recall,0.7712956850475233
+Optimizing for f1score
+Distance Metric,hassanat
