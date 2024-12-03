@@ -5,13 +5,9 @@ import seaborn as sns
 # List of all uploaded file paths
 file_paths = [
     "/Users/slaya/improved-knn/KNNOutputNCAProperPipelined.csv",
-    "/Users/slaya/improved-knn/KNNOutputNCAExpandedK.csv",
     "/Users/slaya/improved-knn/KNNOutputMinkowski.csv",
-    "/Users/slaya/improved-knn/KNNOutputHassanatUnscaledRecall.csv",
-    "/Users/slaya/improved-knn/KNNOutputHassanatUnscaledPrecision.csv",
     "/Users/slaya/improved-knn/KNNOutputHassanatUnscaledAccuracy.csv",
     "/Users/slaya/improved-knn/KNNOutputHassanatScaled.csv",
-    "/Users/slaya/improved-knn/KNNOutputEuclideanComponentsAnalysis.csv"
 ]
 
 # Define column names
