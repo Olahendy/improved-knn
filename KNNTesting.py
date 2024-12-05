@@ -10,6 +10,8 @@ import time
 verbose = False
 minkowskiSubdivisions = 5
 minkowskiHighExponent = 3 # 2^3 = 8
+lowerK = 1
+upperK = 50 #exclusive and only odd k values
 
 dataFiles = ["D1heart.csv", "D2heartoutcomes.csv", "D3diabetes.csv", "D4Heart_Disease_Prediction.csv", "D5kidney_disease.csv", "D6kidney_disease.csv", "D7diabetes.csv", "D8Breast_cancer_data.csv"]
 distanceMetrics = ['euclidean'] #['euclidean', 'hassanat', 'minkowski', 'chebyshev']
@@ -60,7 +62,7 @@ def evaluate_knn_for_metric(distanceMetric, pValue, dataFiles, output_file):
         highRecall = 0
         highf1score = 0
         highK = 0
-        for k in range(1, 50, 2):  # 1, 3, 5, 7, 9, ...
+        for k in range(lowerK, upperK, 2):  # 1, 3, 5, 7, 9, ...
             if verbose:
                 print("K = ", k)
             if NCA:
